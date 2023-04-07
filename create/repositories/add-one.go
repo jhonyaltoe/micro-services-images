@@ -1,0 +1,34 @@
+package repositories
+
+import (
+	"context"
+	"fmt"
+	"time"
+
+	"github.com/micro-service-create-carouselimage/entities"
+	"github.com/micro-service-create-carouselimage/responses"
+	"go.mongodb.org/mongo-driver/bson"
+)
+
+func (r *RepoAttrs) AddOne(company string, documentName string, img *entities.Image) (*responses.DbResponse, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	coll := r.Client.Database(company).Collection("test")
+	filter := bson.M{"name": documentName}
+
+	update := bson.M{
+		"$set": bson.M{"image": img},
+	}
+
+	result, err := coll.UpdateOne(ctx, filter, update)
+	if err != nil {
+		fmt.Println(err)
+		return &responses.DbResponse{Message: responses.MsgDb.InternalError}, err
+	}
+
+	if result.MatchedCount == 1 {
+		return &responses.DbResponse{Message: responses.MsgDb.SuccessUpdate}, nil
+	}
+
+	return &responses.DbResponse{Message: responses.MsgDb.FailureUpdate}, nil
+}
