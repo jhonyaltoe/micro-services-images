@@ -1,9 +1,14 @@
 package main
 
 import (
-	"github.com/micro-service-create-carouselimage/configs"
+	"github.com/gin-gonic/gin"
+	"github.com/micro-service-create-carouselimage/repositories"
+	routes "github.com/micro-service-create-carouselimage/router"
 )
 
 func main() {
-	configs.Connect()
+	router := gin.Default()
+	repositories.Opts.Ping()
+	routes.ImgRoute(router)
+	router.Run(":5000")
 }
