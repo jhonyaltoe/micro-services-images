@@ -15,13 +15,6 @@ type Hook struct {
 	Formatter logrus.Formatter
 }
 
-type FieldMap struct {
-	FieldKeyTime  string
-	FieldKeyLevel string
-	FieldKeyMsg   string
-	FieldKeyFunc  string
-}
-
 // Fire will be called when some logging function is called with current hook
 // It will format log entry to string and write it to appropriate writer
 func (h *Hook) Fire(entry *logrus.Entry) error {
@@ -59,10 +52,8 @@ func Init() (*os.File, *logrus.Logger) {
 			logrus.InfoLevel,
 		},
 		Formatter: &logrus.TextFormatter{
-			FullTimestamp:   true,
-			ForceColors:     true,
-			TimestampFormat: "2006-01-02 15:04:05",
-			DisableColors:   false,
+			FullTimestamp: true,
+			ForceColors:   true,
 		},
 	})
 
