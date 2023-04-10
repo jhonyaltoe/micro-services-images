@@ -2,7 +2,10 @@ module github.com/micro-service-create-carouselimage
 
 go 1.20
 
-require go.mongodb.org/mongo-driver v1.11.3
+require (
+	github.com/sirupsen/logrus v1.9.0
+	go.mongodb.org/mongo-driver v1.11.3
+)
 
 require (
 	github.com/bytedance/sonic v1.8.0 // indirect
