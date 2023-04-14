@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -13,7 +12,7 @@ import (
 func (a *HandlerAdd) AddOne(c *gin.Context) {
 	var img *entities.Image
 	if err := c.BindJSON(&img); err != nil {
-		fmt.Println(err)
+		Log.Errorf("Error decoding: %v", err)
 		c.JSON(http.StatusBadRequest, &responses.HandleResponse{Message: responses.MsgHandler.FailureBindJSON})
 		return
 	}
@@ -24,7 +23,6 @@ func (a *HandlerAdd) AddOne(c *gin.Context) {
 	s := strings.Split(path, "/")
 	response, err := a.Repo.AddOne(company, s[3], img)
 	if err != nil {
-		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, &responses.HandleResponse{Message: response.Message})
 		return
 	}

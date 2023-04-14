@@ -2,8 +2,6 @@ package repositories
 
 import (
 	"context"
-	"fmt"
-	"log"
 	"time"
 
 	"github.com/micro-service-create-carouselimage/configs"
@@ -31,7 +29,8 @@ func new() (handlers.IRepository, IPing) {
 	opts := options.Client().ApplyURI(configs.EnvMongoURI())
 	client, err := mongo.Connect(ctx, opts)
 	if err != nil {
-		log.Fatal(err)
+		Log.Fatal("%v", err)
+		panic(err)
 	}
 
 	return &RepoAttrs{
@@ -44,11 +43,13 @@ func new() (handlers.IRepository, IPing) {
 }
 
 func (r *PingAttr) Ping() {
+	Log.Warn("Pinging MongoDB ...")
 	if err := r.Client.Ping(r.Ctx, nil); err != nil {
-		log.Fatal(err)
+		Log.Fatal("%v", err)
 		r.Cancel()
+		panic(err)
 	}
-	fmt.Println("Connected to MongoDB")
+	Log.Infof("MongoDB connection established!")
 }
 
 var Repo, Opts = new()

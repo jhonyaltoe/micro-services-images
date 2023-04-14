@@ -6,18 +6,16 @@ import (
 	routes "github.com/micro-service-create-carouselimage/router"
 )
 
-var file, _ = configs.Init()
+var file, log = configs.Init()
 
 func main() {
+	log.Warnf("Service Starting...")
 	defer file.Close()
-
-	// log.Info("Info message")
-	// log.Warn("Warn message")
-	// log.Error("Error message")
-	// log.Fatal("Fatal message")
-
 	router := configs.CustomGin()
 	repositories.Opts.Ping()
 	routes.ImgRoute(router)
-	router.Run(":5000")
+	log.Info("Service Ready")
+	if err := router.Run(":5000"); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 }

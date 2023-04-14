@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/micro-service-create-carouselimage/entities"
@@ -22,7 +21,7 @@ func (r *RepoAttrs) AddMany(company string, documentName string, imgs []*entitie
 
 	result, err := coll.UpdateOne(ctx, filter, update)
 	if err != nil {
-		fmt.Println(err)
+		Log.Errorf("Error insert to MongoDB: %v", err)
 		return &responses.DbResponse{Message: responses.MsgDb.InternalError}, err
 	}
 
