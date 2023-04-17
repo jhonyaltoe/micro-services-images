@@ -17,6 +17,12 @@ func (a *HandlerAdd) AddOne(c *gin.Context) {
 		return
 	}
 
+	if errs := img.Validate(); errs != nil {
+		Log.Errorf("Validation error: %v", errs)
+		c.JSON(http.StatusBadRequest, &responses.HandleResponse{Message: responses.MsgHandler.ValidationErr, Error: errs})
+		return
+	}
+
 	company := c.Param("company")
 
 	path := c.Request.URL.Path

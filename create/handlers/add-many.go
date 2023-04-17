@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -15,6 +16,18 @@ func (a *HandlerAdd) AddMany(c *gin.Context) {
 		Log.Errorf("Error decoding: %v", err)
 		c.JSON(http.StatusBadRequest, &responses.HandleResponse{Message: responses.MsgHandler.FailureBindJSON})
 		return
+	}
+
+	for i := range imgs {
+		if errs := imgs[i].Validate(); errs != nil {
+			Log.Errorf("Validation error: %v", errs)
+			c.JSON(http.StatusBadRequest, &responses.HandleResponse{
+				Message: responses.MsgHandler.ValidationErr,
+				Error:   errs,
+				Index:   strconv.Itoa(i),
+			})
+			return
+		}
 	}
 
 	company := c.Param("company")
